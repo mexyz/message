@@ -1,0 +1,31 @@
+{
+  "name": "message",
+  "version": "0.1.0",
+  "description": "message",
+  "main": "Server.js",
+  "scripts": {
+	"start": "node Server.js",
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "dependencies":{
+	  "express": "latest",
+	  "socket.io": "latest",
+	  "cluster":"latest",
+	  "os":"latest",
+	  "ioredis":"latest",
+	  "routes":"latest",
+	  "http":"latest",
+	  "socket.io-redis":"latest",
+	  "net":"latest",
+	  "body-parser":"latest"
+  },
+  "keywords": [
+    "node.js",
+    "eclipse",
+    "nodeclipse"
+  ],
+  "author": "",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
