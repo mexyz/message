@@ -5,7 +5,8 @@ function init(socket,io) {
 		redis.getObject(socketId,function(res){
             if(res!="{}"){
             	var key=res.userName;
-            	redis.getArray(key,function(array){
+            	redis.getObject(key,function(obj){
+            		var array=obj.socketId;
     				for (var i = 0; i < array.length; i++) {
 						if (array[i] == socketId) {
 							array.splice(i, 1);
@@ -14,7 +15,8 @@ function init(socket,io) {
     				if(array.length==0){
     					redis.delObject(key);
     				}else{
-    					redis.setArray(key,array,600);
+    					obj.socketId=array
+    					redis.setObject(key,obj,600);
     				}
             	});
             	redis.getArray("onlineUser",function(array){
@@ -30,7 +32,26 @@ function init(socket,io) {
     				}
             	});
             	redis.delObject(socketId);
-            	io.emit('broadcast-quit', {userName:key});
+            	
+            	var url=socket.handshake.headers.referer;
+     		   var urls=url.split("/");
+     		   var roomId=urls[urls.length-1];
+     		   if(isNaN(roomId)){
+     			   roomId=0;
+     		   }
+               io.in(roomId).emit('broadcast-quit', {userName:key});
+               redis.getObject("ChatRoomOnlineUsers",function(obj){
+    			   if(obj["ChatRoom-"+roomId]){
+    				   var array=obj["ChatRoom-"+roomId];
+    				   for (var i = 0; i < array.length; i++) {
+   						if (array[i] == key) {
+   							array.splice(i, 1);
+   						}
+       				}
+    				   obj["ChatRoom-"+roomId]=array;
+    			   }
+    			   redis.setObject("ChatRoomOnlineUsers",obj,600);
+    		   });
             }
         });
 	});

@@ -20,7 +20,15 @@ html, body {
     height:555px;
     padding:0px;
 }
+.room-list-body{
+	overflow-y:scroll;
+    height:620px;
+    padding:0px;
+}
 
+.room-list-body .list-group-item{
+	 cursor:pointer;
+}
 .list-body{
     overflow-y:scroll;
     height:450px;

@@ -7,11 +7,21 @@ function init(app,io,cluster) {
 
 	app.get('/chatRoom', function(req, res) {
 		res.sendFile(__dirname.substring(0,__dirname.length-4) + 'static/html/chatRoom.html');
+	})
+	
+	app.get('/chatRoom/:id', function(req, res) {
+		res.sendFile(__dirname.substring(0,__dirname.length-4) + 'static/html/chatRoom.html');
+	});
+	
+	app.get('/chatRoomOnline', function(req, res) {
+		redis.getObject("ChatRoomOnlineUsers",function(obj){
+			res.send(obj);
+		});
 	});
 	
 	app.post('/chageNickName', function(req, res) {
-		redis.getArray(req.body.nickname,function(array){
-		    if(array.length==0){
+		redis.getObject(req.body.nickname,function(obj){
+		    if(!obj["socketId"]){
 		    	res.send({
 		    		code:1,
 					msg:"该昵称可用"
@@ -27,8 +37,8 @@ function init(app,io,cluster) {
 	
 	app.get('/sendMessage', function(req, res) {//推送消息
 		
-		redis.getArray(req.query.id,function(array){
-			process.send({cmd:"notify-system",data:{socketIds:array,content:req.query.msg}});
+		redis.getObject(req.query.id,function(obj){
+			process.send({cmd:"notify-system",data:{socketIds:obj.socketId,content:req.query.msg}});
 		});
 		
 		res.send({

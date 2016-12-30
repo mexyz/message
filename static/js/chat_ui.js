@@ -45,11 +45,11 @@ function removeListUser(_user) {
 }
 
 function addUserToList(_user) {
-    $(".list-table").append('<tr><td>' + _user + '</td></tr>');
+    $("#onlineUserList").append('<li class="list-group-item">'+_user+'</li>');
 }
 
 function useUserList(_user_list) {
-    $(".list-table").html("");
+    $("#onlineUserList").html("");
     for (var i = 0; i < _user_list.data.length; i++) {
         addUserToList(_user_list.data[i].userName);
     }
@@ -57,7 +57,7 @@ function useUserList(_user_list) {
 }
 
 function updateListCount() {
-    var list_count = $('.list-table').find('tr').length;
+    var list_count = $('#onlineUserList').find('li').length;
     $('#list-count').text("当前在线：" + list_count + "人");
 }
 
@@ -135,5 +135,9 @@ $('#nickname-edit').keydown(function(_event) {
         onClickApplyNickname();
     }
 });
+
+function changeChatRoomName(name){
+	$("#chatRoomName").html("&nbsp;["+name+"]聊天室");
+}
 
 QxEmotion($('#emotion-btn'), $('#input-edit'));
